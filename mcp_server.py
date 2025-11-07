@@ -10,15 +10,13 @@ import json
 import re
 import mysql.connector
 
-# Load environment variables
 load_dotenv()
 
-# Configure Gemini API
+
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI(title="Smart Resume Analyzer MCP Server")
 
-# ---- Helper functions ----
 def extract_text_from_pdf(file):
     try:
         reader = PdfReader(file)
