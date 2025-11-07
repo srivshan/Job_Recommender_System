@@ -80,7 +80,6 @@ def notify_n8n(email, skills, experience):
         print(f"❌ Failed to notify n8n: {e}")
 
 
-# ---- Database Connection ----
 def get_db_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
@@ -89,7 +88,6 @@ def get_db_connection():
         database=os.getenv("DB_NAME1")
     )
 
-# ---- API endpoint 1: Resume Analysis ----
 @app.post("/analyze_resume")
 async def analyze_resume(file: UploadFile = File(...)):
     filename = file.filename.lower()
@@ -107,12 +105,12 @@ async def analyze_resume(file: UploadFile = File(...)):
         result = analyze_with_gemini(text)
         parsed = clean_json_response(result)
 
-        # Extract clean fields
+        
         skills = parsed.get("skills", [])
         experience = parsed.get("experience", "")
-        email = "user@example.com"  # Temporary placeholder until Streamlit UI
+        email = "user@example.com"  
 
-        # Notify n8n with sanitized info
+       
         notify_n8n(email, skills, experience)
 
         return {
@@ -126,7 +124,6 @@ async def analyze_resume(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Gemini analysis failed: {str(e)}")
 
 
-# ---- API endpoint 2: Store Jobs (used by n8n or job API) ----
 @app.post("/store_jobs")
 async def store_jobs(data: dict):
     """Store job data received from n8n or any other service into MySQL."""
